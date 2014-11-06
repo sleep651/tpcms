@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{$tpltitle}菜单(节点)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/formValidator.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/formValidatorRegex.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){
+			window.top.art.dialog({content:msg,lock:true,width:250,height:100,ok:function(){$(obj).focus();}});
+		}});
+		$("#node_name").formValidator({onshow:"请输入菜单名称",onfocus:"请输入菜单名称"}).inputValidator({min:1,onerror:"菜单名称必须填写"});
+		$("#lvl").formValidator({
+			forcevalid : true,
+			triggerevent : "change",
+			onshow : "请输入的菜单级别（1-99之间）",
+			onfocus : "只能输入1-99之间的数字哦",
+			oncorrect : "恭喜你,你输对了"
+			}).inputValidator({
+			min : 1,
+			max : 99,
+			type : "value",
+			onerrormin : "你输入的值必须大于等于1",
+			onerror : "菜单登记必须在1-99之间，请确认"
+			});
+		$("#url").formValidator({empty:true,onshow:"请输入访问参数或完整URL地址",onfocus:"如：?s=/xx/xx/xx 或 http://www.xxx.com",onCorrect:"输入正确"}).inputValidator({max:250,onerror:"描述不能超过250个字符,请确认"});
+	});
+	//动态修改上级菜单信息
+	function changePid(){
+		var id=$("#pid").val();
+		var sysid=$("#pid").find("option:selected").attr("sysid");
+		var type=$("#pid").find("option:selected").attr("type");
+		//alert("sysid="+sysid+",type="+type);
+		$("#sysid").val(sysid);
+		if(type=='AT'){
+			$("#super_id").val(id);
+		}else{
+			$("#super_id").val(null);
+		}
+	}	
+</script>
+</head>
+<body>
+		<gt name="info.nodeid" value="0">
+			<form action="{:U('/Admin/SsoNode/edit')}" method="post" name="form" id="myform">
+			<input type="hidden" name="nodeid" value="{$info.nodeid}">
+		<else />
+			<form action="{:U('/Admin/SsoNode/add')}" method="post" name="form" id="myform">
+		</gt>
+			<input type="hidden" id="sysid" name="sysid" value="{$info.sysid}">
+			<input type="hidden" id="super_id" name="super_id" value="{$info.super_id}">
+			<table width="98%" border="0" cellpadding="4" cellspacing="1" class="table">
+
+				<tr class="table_title">
+					<td colspan="4">{$tpltitle}菜单(节点)</td>
+				</tr>
+				<tr class="tr rt">
+					<td width="100">上级菜单：</td>
+					<td colspan="3" class="lt">
+						<select id="pid" name="pid" onchange="changePid()">
+							{$select_categorys}
+						</select>
+					</td>
+				</tr>
+				<tr class="tr rt">
+					<td width="100">菜单名称：</td>
+					<td colspan="3" class="lt">
+						<input type="text" name="node_name" id="node_name" style="width:200px" value="{$info.node_name}">
+					</td>
+				</tr>
+				<tr class="tr rt">
+					<td >菜单类型：</td>
+					<td colspan="3" class="lt">
+						<select name="node_type">
+							<option value="AT" <eq name="info.node_type" value="AT">selected=""</eq> >菜单</option>
+							<option value="MT" <eq name="info.node_type" value="MT">selected=""</eq> >功能</option>
+						</select>
+					</td>
+				</tr>
+				<tr class="tr rt">
+					<td width="100">菜单级别：</td>
+					<td colspan="3" class="lt">
+						<input type="text" name="lvl" id="lvl" style="width:200px" value="{$info.lvl}">
+					</td>
+				</tr>
+				<tr class="tr rt">
+					<td >链接参数：</td>
+					<td colspan="3" class="lt">
+						<input type="text" name="url" id="url" style="width:400px" value="{$info.url}">
+					</td>
+				</tr>
+				<tr class="tr rt">
+					<td >节点状态：</td>
+					<td colspan="3" class="lt">
+						<input type="radio" class="radio" value="normal" name="status" <if condition="($info.status eq 'normal') OR ($info['status'] eq '') ">checked=""</if> >
+							启用
+							<input type="radio" class="radio" value="inactive" name="status" <eq name="info.status" value="inactive">checked=""</eq> >
+							关闭
+					</td>
+				</tr>
+	<tr class="tr lt">
+		<td colspan="4">
+			<gt name="info.nodeid" value="0">
+				<input class="bginput" type="submit" name="dosubmit" value="修 改" >
+				<else />
+				<input class="bginput" type="submit" name="dosubmit" value="添 加"></gt>
+			&nbsp;
+			<input class="bginput" type="button" onclick="javascript:history.back(-1);" value="返 回" ></td>
+	</tr>
+</table>
+</form>
+<include file="Index:footer" />
+</body>
+</html>

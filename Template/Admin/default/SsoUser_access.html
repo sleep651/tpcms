@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>权限设置</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/js/treetable/jquery.treetable.js"></script>
+	<link rel='stylesheet' type='text/css' href='__PUBLIC__/js/treetable/css/jquery.treeTable.css' />
+</head>
+<body>
+	<form action="{:U('/Admin/SsoUser/access_edit')}" method="post" name="form" id="form">
+		<input type="hidden" name="userid" value="{$Think.get.userid}" />
+		<table id="tree" width="100%" border="0" cellpadding="4" cellspacing="1" class="table">
+			{$html_tree}
+			<tr class="tr lt">
+				<td>
+					<input class="bginput" type="submit" name="dosubmit" value="提 交" ></td>
+			</tr>
+		</table>
+	</form>
+</body>
+	<script type="text/javascript">
+  $(document).ready(function() {
+  	//树配置
+    $("#tree").treeTable({
+    	expandable: true,
+    });
+
+   });
+</script>
+</html>

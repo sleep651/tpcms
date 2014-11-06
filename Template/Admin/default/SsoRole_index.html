@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>后台角色管理-{$Think.config.cms_name}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+	<style>td{ height:22px; line-height:22px}</style>
+</head>
+<body>
+	<form action="{:U('/Admin/SsoRole/sort')}" method="post" name="form">
+	<table width="98%" border="0" cellpadding="5" cellspacing="1" class="table">
+		<tr>
+			<td colspan="8" class="table_title">
+				<span class="fl">角色管理</span>
+				<span class="fr">
+					<a href="{:U('/Admin/SsoRole/add')}">添加角色</a>
+				</span>
+			</td>
+			<tr class="list_head ct">
+				<td width="8%">排序权重</td>
+				<td width="20%">所属系统</td>
+				<td width="18%">角色名称</td>
+				<td width="8%">级别</td>
+				<td width="12%">更新日期</td>
+				<td >角色描述</td>
+				<td width="6%">状态</td>
+				<td width="10%">管理操作</td>
+			</tr>
+	    <volist name="list" id="vo">
+			<tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+				<td align='center'>
+					<input type='text' value='{$vo.rank}' size='3' name='sort[{$vo.roleid}]'></td>
+				<td align='center'>{$vo.sysname}</td>
+				<td >{$vo.rname}</td>
+				<td >{$vo.lvl}</td>
+				<td align='center'>{:date('Y-m-d H:i:s',$vo['created'])}</td>
+				<td >{$vo.comments}</td>
+				<td align='center'><eq name="vo.status" value="normal"><font color="red">√</font><else/><font color="blue">×</font></eq> 
+				</td>
+				<td align='center'>
+					<a href="{:U('/Admin/SsoRole/edit/',array('roleid'=>$vo['roleid']))}">修改</a>
+					| <a href="javascript:void(0)" onclick="return confirmurl('{:U('/Admin/SsoRole/del/',array('roleid'=>$vo['roleid']))}','确定删除该角色吗?')">删除</a>
+				</td>
+			</tr>
+	    </volist>
+		<tr class="tr">
+          <td colspan="8" valign="middle">
+            <input type="submit" value="排序" class="bginput" />
+          </td>
+        </tr>
+		</table>
+	</form>
+		<script>var version='{$Think.config.cms_var}';</script>
+		<include file="Index:footer" />
+</body>
+</html>
